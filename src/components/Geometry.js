@@ -13,6 +13,7 @@ class Geometry extends React.Component {
     let colors = ["#b10f2e", "#b10f2e", "#466699", "#355282"];
     this.state = {
       tempo: 100,
+      playing: false,
       ball: {
         inner: {
           bigRadius: 30,
@@ -47,8 +48,6 @@ class Geometry extends React.Component {
   componentDidMount() {
     this.initializeTwo();
     this.drawShapes();
-    this.initiateBeatCircles();
-    this.timelineSetup();
     var mySVG = this.refs.geoCanvas.children[0];
     mySVG.setAttribute("viewBox", "0 0 500 500");
     mySVG.setAttribute("class", "geoSVG");
@@ -81,23 +80,29 @@ class Geometry extends React.Component {
 
   restart() {
     this.stop();
-    this.play();
+    if (this.state.playing) {
+      this.play();
+    }
   }
 
   play() {
+    this.setState({ playing: true });
+    this.initiateBeatCircles();
+    this.timelineSetup();
     this.timeline1.play();
     this.timeline2.play();
     this.radiusFlash1.play();
     this.radiusFlash2.play();
-    this.initiateBeatCircles();
-    this.timelineSetup();
   }
 
   stop() {
-    this.timeline1.remove(this.timeline1.getChildren());
-    this.timeline2.remove(this.timeline2.getChildren());
-    this.radiusFlash1.remove();
-    this.radiusFlash2.remove();
+    if (typeof this.timeline1 !== "undefined") {
+      this.setState({ playing: false });
+      this.timeline1.remove(this.timeline1.getChildren());
+      this.timeline2.remove(this.timeline2.getChildren());
+      this.radiusFlash1.remove();
+      this.radiusFlash2.remove();
+    }
     this.two.clear();
     this.drawShapes();
   }

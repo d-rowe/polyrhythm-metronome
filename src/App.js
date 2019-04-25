@@ -9,7 +9,7 @@ class App extends React.Component {
     this.state = {
       sides1: 3,
       sides2: 4,
-      playing: true
+      playing: false
     };
   }
 
