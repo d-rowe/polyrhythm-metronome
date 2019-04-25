@@ -1,38 +1,43 @@
 import React from "react";
 import Tone from "tone";
 import Two from "two.js";
-import { TweenMax, Power2 } from "gsap/TweenMax";
+import { TweenMax, Power2, Power3 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
 import click1 from "../sounds/click1.wav";
 import click2 from "../sounds/click2.wav";
+import "./Geometry.css";
 
 class Geometry extends React.Component {
   constructor(props) {
     super(props);
+    let colors = ["#b10f2e", "#b10f2e", "#466699", "#355282"];
     this.state = {
-      tempo: 120,
+      tempo: 200,
       ball: {
-        bigRadius: 40,
-        smallRadius: 10,
         inner: {
-          fill: "orangered",
-          stroke: "orangered"
+          bigRadius: 30,
+          smallRadius: 10,
+          fill: colors[1],
+          stroke: colors[1],
+          radiusEasing: Power3.easeIn
         },
-        radiusEasing: Power2.easeIn,
         outer: {
-          fill: "rgb(0, 200, 255)",
-          stroke: "rgb(0, 200, 255)"
-        }
+          bigRadius: 30,
+          smallRadius: 15,
+          fill: colors[3],
+          stroke: colors[3],
+          radiusEasing: Power2.easeIn
+        },
       },
       polygon: {
-        lineWidth: 15,
-        inner: { color: "orangered", sides: 4 },
-        outer: { color: "rgb(0, 200, 255)", sides: 7 }
+        lineWidth: 5,
+        inner: { color: colors[0], sides: 4 },
+        outer: { color: colors[2], sides: 5 }
       },
       render: {
-        origin: { x: 300, y: 300 },
-        width: 1000,
-        height: 1000,
+        origin: { x: 250, y: 250 },
+        width: 500,
+        height: 500,
         innerRadius: 100,
         outerRadius: 200
       }
@@ -43,6 +48,10 @@ class Geometry extends React.Component {
     this.drawShapes();
     this.initiateBeatCircles();
     this.timelineSetup();
+    var mySVG = this.refs.geoCanvas.children[0];
+    mySVG.setAttribute("viewBox", "0 0 500 500");
+    mySVG.setAttribute("class", "geoSVG");
+    // mySVG.setAttribute("shape-rendering", "geometricPrecision");
   }
 
   initializeTwo() {
@@ -90,14 +99,14 @@ class Geometry extends React.Component {
     this.beatCircle1 = this.two.makeCircle(
       this.state.render.origin.x,
       this.state.render.origin.y - this.state.render.innerRadius,
-      this.state.ball.bigRadius
+      this.state.ball.inner.bigRadius
     );
     this.beatCircle1.fill = this.state.ball.inner.fill;
     this.beatCircle1.stroke = this.state.ball.inner.stroke;
     this.beatCircle2 = this.two.makeCircle(
       this.state.render.origin.x,
       this.state.render.origin.y - this.state.render.outerRadius,
-      this.state.ball.bigRadius
+      this.state.ball.outer.bigRadius
     );
     this.beatCircle2.fill = this.state.ball.outer.fill;
     this.beatCircle2.stroke = this.state.ball.outer.stroke;
@@ -134,14 +143,14 @@ class Geometry extends React.Component {
     for (let i = 1; i <= points1.length; i++) {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
-          radius: this.state.ball.smallRadius,
-          ease: this.state.ball.radiusEasing
+          radius: this.state.ball.inner.smallRadius,
+          ease: this.state.ball.inner.radiusEasing
         })
       );
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
-          radius: this.state.ball.bigRadius,
-          ease: this.state.ball.radiusEasing
+          radius: this.state.ball.inner.bigRadius,
+          ease: this.state.ball.inner.radiusEasing
         })
       );
     }
@@ -165,14 +174,14 @@ class Geometry extends React.Component {
     for (let i = 1; i <= points2.length; i++) {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
-          radius: this.state.ball.smallRadius,
-          ease: this.state.ball.radiusEasing
+          radius: this.state.ball.outer.smallRadius,
+          ease: this.state.ball.outer.radiusEasing
         })
       );
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
-          radius: this.state.ball.bigRadius,
-          ease: this.state.ball.radiusEasing
+          radius: this.state.ball.outer.bigRadius,
+          ease: this.state.ball.outer.radiusEasing
         })
       );
     }
