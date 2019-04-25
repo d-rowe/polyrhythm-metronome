@@ -69,69 +69,79 @@ class App extends React.Component {
 
   render() {
     return (
-      <section className="section">
-        <div className="container">
-          <div className="columns">
-            <div className="column vCenter">
-              <div className="box shadow">
-                <div className="bar">
-                  <h6 class="title is-6">polyrhythm metronome</h6>
-                </div>
-                <div className="bar">
-                  <p className="paditem">tempo</p>
-                  <input
-                    onInput={this.handleTempo}
-                    className="input paditem"
-                    type="number"
-                    defaultValue="100"
-                    min="3"
-                    max="1000"
-                  />
-                  <button
-                    onClick={this.handleClick}
-                    className="button is-info paditem"
-                  >
-                    {this.state.playing ? (
-                      <i class="fas fa-stop" />
-                    ) : (
-                      <i class="fas fa-play" />
-                    )}
-                  </button>
-                </div>
-                <div className="bar">
-                  <input
-                    ref="sides2"
-                    onInput={this.handleSides2}
-                    className="input is-info"
-                    type="number"
-                    defaultValue="4"
-                    min="3"
-                    max="100000"
-                  />
-                  <input
-                    ref="sides1"
-                    onInput={this.handleSides1}
-                    className="input is-danger"
-                    type="number"
-                    defaultValue="3"
-                    min="3"
-                    max="100000"
-                  />
+      <div class="row">
+        <section className="section">
+          <div className="container">
+            <div className="columns">
+              <div className="column vCenter">
+                <div className="box shadow">
+                  <div className="bar">
+                    <h6 class="title is-6">polyrhythm metronome</h6>
+                  </div>
+                  <div className="bar">
+                    <p className="paditem">tempo</p>
+                    <input
+                      onInput={this.handleTempo}
+                      className="input paditem"
+                      type="number"
+                      defaultValue="100"
+                      min="3"
+                      max="1000"
+                    />
+                    <button
+                      onClick={this.handleClick}
+                      className="button is-info paditem"
+                    >
+                      {this.state.playing ? (
+                        <i class="fas fa-stop" />
+                      ) : (
+                        <i class="fas fa-play" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="bar">
+                    <input
+                      ref="sides2"
+                      onInput={this.handleSides2}
+                      className="input is-info"
+                      type="number"
+                      defaultValue="4"
+                      min="3"
+                      max="100000"
+                    />
+                    <input
+                      ref="sides1"
+                      onInput={this.handleSides1}
+                      className="input is-danger"
+                      type="number"
+                      defaultValue="3"
+                      min="3"
+                      max="100000"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="column is-three-fifths">
-              <Geometry
-                tempo={this.state.tempo}
-                playing={this.state.playing}
-                sides1={this.state.sides1}
-                sides2={this.state.sides2}
-                handleStop={this.handleStop.bind(this)}
-              />
+              <div className="column is-three-fifths">
+                <Geometry
+                  tempo={this.state.tempo}
+                  playing={this.state.playing}
+                  sides1={this.state.sides1}
+                  sides2={this.state.sides2}
+                  handleStop={this.handleStop.bind(this)}
+                />
+              </div>
             </div>
           </div>
+        </section>
+        <div class="content has-text-centered foot">
+          <p><strong>
+
+            made by {" "}
+            <a href="https://danielrmusic.com">daniel rowe</a>
+          </strong>
+          </p>
         </div>
-      </section>
+      </div>
     );
   }
 }
