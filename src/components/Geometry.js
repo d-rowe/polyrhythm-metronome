@@ -7,77 +7,108 @@ import click1 from "../sounds/click1.wav";
 import click2 from "../sounds/click2.wav";
 
 class Geometry extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tempo: 120,
+      ball: {
+        bigRadius: 40,
+        smallRadius: 10,
+        inner: {
+          fill: "orangered",
+          stroke: "orangered"
+        },
+        radiusEasing: Power2.easeIn,
+        outer: {
+          fill: "rgb(0, 200, 255)",
+          stroke: "rgb(0, 200, 255)"
+        }
+      },
+      polygon: {
+        lineWidth: 15,
+        inner: { color: "orangered", sides: 4 },
+        outer: { color: "rgb(0, 200, 255)", sides: 7 }
+      },
+      render: {
+        origin: { x: 300, y: 300 },
+        width: 1000,
+        height: 1000,
+        innerRadius: 100,
+        outerRadius: 200
+      }
+    };
+  }
   componentDidMount() {
     this.initializeTwo();
-    this.drawShapes(5, 6, 150);
-    this.initiateBeatCircles(20);
-    this.timelineStart(10);
+    this.drawShapes();
+    this.initiateBeatCircles();
+    this.timelineSetup();
   }
 
   initializeTwo() {
-    var params = { width: 1000, height: 1000, autostart: true };
+    let params = {
+      width: this.state.render.width,
+      height: this.state.render.height,
+      autostart: true
+    };
     this.two = new Two(params).appendTo(this.refs.geoCanvas);
-    this.origin = { x: 300, y: 300 };
   }
 
-  drawShapes(sides1, sides2, radius) {
-    var lineWidth = 4;
-    var outerMultiply = 1.7;
-    this.radius = radius;
-    this.outerRadius = radius * outerMultiply;
-    var shape1 = this.two.makePolygon(
-      this.origin.x,
-      this.origin.y,
-      radius,
-      sides1
+  drawShapes() {
+    let shape1 = this.two.makePolygon(
+      this.state.render.origin.x,
+      this.state.render.origin.y,
+      this.state.render.innerRadius,
+      this.state.polygon.inner.sides
     );
-    var shape2 = this.two.makePolygon(
-      this.origin.x,
-      this.origin.y,
-      this.outerRadius,
-      sides2
+    let shape2 = this.two.makePolygon(
+      this.state.render.origin.x,
+      this.state.render.origin.y,
+      this.state.render.outerRadius,
+      this.state.polygon.outer.sides
     );
 
-    shape1.stroke = "orangered";
-    shape1.linewidth = lineWidth;
-    shape1.rotation = Math.PI + Math.PI / sides1;
+    shape1.stroke = this.state.polygon.inner.color;
+    shape1.linewidth = this.state.polygon.lineWidth;
+    shape1.rotation = Math.PI + Math.PI / this.state.polygon.inner.sides;
     shape1.noFill();
-    shape1.points = this.getPoints(shape1, sides1);
-    shape1.sides = sides1;
+    shape1.points = this.getPoints(shape1, this.state.polygon.inner.sides);
+    shape1.sides = this.state.polygon.inner.sides;
 
-    shape2.stroke = "rgb(0, 200, 255)";
-    shape2.linewidth = lineWidth;
-    shape2.rotation = Math.PI + Math.PI / sides2;
+    shape2.stroke = this.state.polygon.outer.color;
+    shape2.linewidth = this.state.polygon.lineWidth;
+    shape2.rotation = Math.PI + Math.PI / this.state.polygon.outer.sides;
     shape2.noFill();
-    shape2.points = this.getPoints(shape2, sides2);
-    shape2.sides = sides2;
+    shape2.points = this.getPoints(shape2, this.state.polygon.outer.sides);
+    shape2.sides = this.state.polygon.outer.sides;
 
     this.shape1 = shape1;
     this.shape2 = shape2;
   }
 
-  initiateBeatCircles(radius) {
+  initiateBeatCircles() {
     this.beatCircle1 = this.two.makeCircle(
-      this.origin.x,
-      this.origin.y - this.radius,
-      radius
+      this.state.render.origin.x,
+      this.state.render.origin.y - this.state.render.innerRadius,
+      this.state.ball.bigRadius
     );
-    this.beatCircle1.fill = "orangered";
-    this.beatCircle1.noStroke();
+    this.beatCircle1.fill = this.state.ball.inner.fill;
+    this.beatCircle1.stroke = this.state.ball.inner.stroke;
     this.beatCircle2 = this.two.makeCircle(
-      this.origin.x,
-      this.origin.y - this.outerRadius,
-      radius
+      this.state.render.origin.x,
+      this.state.render.origin.y - this.state.render.outerRadius,
+      this.state.ball.bigRadius
     );
-    this.beatCircle2.fill = "rgb(0, 200, 255)";
-    this.beatCircle2.noStroke();
+    this.beatCircle2.fill = this.state.ball.outer.fill;
+    this.beatCircle2.stroke = this.state.ball.outer.stroke;
   }
 
-  timelineStart(duration) {
-    var clicker1 = new Tone.Player({
+  timelineSetup() {
+    let duration = (60 / this.state.tempo) * this.state.polygon.outer.sides;
+    let clicker1 = new Tone.Player({
       url: click1
     }).toMaster();
-    var clicker2 = new Tone.Player({
+    let clicker2 = new Tone.Player({
       url: click2
     }).toMaster();
     this.timeline1 = new TimelineMax({ repeat: -1 });
@@ -103,14 +134,14 @@ class Geometry extends React.Component {
     for (let i = 1; i <= points1.length; i++) {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
-          radius: 15,
-          ease: Power2.easeIn
+          radius: this.state.ball.smallRadius,
+          ease: this.state.ball.radiusEasing
         })
       );
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
-          radius: 20,
-          ease: Power2.easeIn
+          radius: this.state.ball.bigRadius,
+          ease: this.state.ball.radiusEasing
         })
       );
     }
@@ -134,14 +165,14 @@ class Geometry extends React.Component {
     for (let i = 1; i <= points2.length; i++) {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
-          radius: 15,
-          ease: Power2.easeIn
+          radius: this.state.ball.smallRadius,
+          ease: this.state.ball.radiusEasing
         })
       );
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
-          radius: 20,
-          ease: Power2.easeIn
+          radius: this.state.ball.bigRadius,
+          ease: this.state.ball.radiusEasing
         })
       );
     }
@@ -153,10 +184,10 @@ class Geometry extends React.Component {
     for (let i = 0; i < sides; i++) {
       let vertex = shape.vertices[i];
       let point = this.rotatePoints(
-        this.origin.x,
-        this.origin.y,
-        this.origin.x - vertex.x,
-        this.origin.y - vertex.y,
+        this.state.render.origin.x,
+        this.state.render.origin.y,
+        this.state.render.origin.x - vertex.x,
+        this.state.render.origin.y - vertex.y,
         180 / sides
       );
       points.push({ x: point[0], y: point[1] });
