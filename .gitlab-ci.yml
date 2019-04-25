@@ -8,6 +8,6 @@ pages:
   - mv .public public
   artifacts:
     paths:
-    - public/build/
+    - public
   only:
   - master
