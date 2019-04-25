@@ -15,6 +15,7 @@ class Geometry extends React.Component {
       tempo: 100,
       playing: false,
       ball: {
+        animationOpacity: 0.7,
         inner: {
           bigRadius: 25,
           smallRadius: 10,
@@ -162,6 +163,7 @@ class Geometry extends React.Component {
     );
     this.beatCircle1.fill = this.state.ball.inner.fill;
     this.beatCircle1.stroke = this.state.ball.inner.stroke;
+    this.beatCircle1.opacity = this.state.ball.animationOpacity;
     this.beatCircle2 = this.two.makeCircle(
       this.state.render.origin.x,
       this.state.render.origin.y - this.state.render.outerRadius,
@@ -169,6 +171,7 @@ class Geometry extends React.Component {
     );
     this.beatCircle2.fill = this.state.ball.outer.fill;
     this.beatCircle2.stroke = this.state.ball.outer.stroke;
+    this.beatCircle2.opacity = this.state.ball.animationOpacity;
   }
 
   timelineSetup() {
@@ -211,7 +214,7 @@ class Geometry extends React.Component {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.bigRadius,
-          opacity: 0.6,
+          opacity: this.state.ball.animationOpacity,
           ease: this.state.ball.inner.radiusEasing
         })
       );
@@ -244,7 +247,7 @@ class Geometry extends React.Component {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.bigRadius,
-          opacity: 0.6,
+          opacity: this.state.ball.animationOpacity,
           ease: this.state.ball.outer.radiusEasing
         })
       );

@@ -67,42 +67,50 @@ class App extends React.Component {
         <div className="container">
           <div className="columns">
             <div className="column vCenter">
-              <div className="box">
-                Tempo
-                <input
-                  onInput={this.handleTempo}
-                  className="input"
-                  type="number"
-                  defaultValue="100"
-                  min="3"
-                  max="1000"
-                />
-                <input
-                  ref="sides1"
-                  onInput={this.handleSides1}
-                  className="input"
-                  type="number"
-                  defaultValue="3"
-                  min="3"
-                  max="100000"
-                />
-                Against
-                <input
-                  ref="sides2"
-                  onInput={this.handleSides2}
-                  className="input"
-                  type="number"
-                  defaultValue="4"
-                  min="3"
-                  max="100000"
-                />
-                <button onClick={this.handleClick} className="button is-info">
-                  {this.state.playing ? (
-                    <i class="fas fa-stop" />
-                  ) : (
-                    <i class="fas fa-play" />
-                  )}
-                </button>
+              <div className="box shadow">
+              <div className="bar">
+              <h6 class="title is-6">polyrhythms</h6>
+              {/* <br/>
+              <h6 class="subtitle is-6">metronome</h6> */}
+              </div>
+                <div className="bar">
+                  <p className="paditem">tempo</p>
+                  <input
+                    onInput={this.handleTempo}
+                    className="input paditem"
+                    type="number"
+                    defaultValue="100"
+                    min="3"
+                    max="1000"
+                  />
+                  <button onClick={this.handleClick} className="button is-info paditem">
+                    {this.state.playing ? (
+                      <i class="fas fa-stop" />
+                    ) : (
+                      <i class="fas fa-play" />
+                    )}
+                  </button>
+                </div>
+                <div className="bar">
+                  <input
+                    ref="sides2"
+                    onInput={this.handleSides2}
+                    className="input is-info"
+                    type="number"
+                    defaultValue="4"
+                    min="3"
+                    max="100000"
+                  />
+                  <input
+                    ref="sides1"
+                    onInput={this.handleSides1}
+                    className="input is-danger"
+                    type="number"
+                    defaultValue="3"
+                    min="3"
+                    max="100000"
+                  />
+                </div>
               </div>
             </div>
             <div className="column is-three-fifths">
