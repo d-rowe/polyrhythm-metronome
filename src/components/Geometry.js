@@ -1,24 +1,30 @@
 import React from "react";
+import Tone from "tone";
 import Two from "two.js";
-import { TweenMax, SlowMo } from "gsap/TweenMax";
+import { TweenMax, Power2 } from "gsap/TweenMax";
+import { TimelineMax } from "gsap/TimelineMax";
+import click1 from "../sounds/click1.wav";
+import click2 from "../sounds/click2.wav";
 
 class Geometry extends React.Component {
   componentDidMount() {
     this.initializeTwo();
-    this.drawShapes(3, 5, 100);
-    this.initiateBeatCircles();
-    this.startAnimation();
+    this.drawShapes(5, 6, 150);
+    this.initiateBeatCircles(20);
+    this.timelineStart(10);
   }
 
   initializeTwo() {
-    var params = { width: 1000, height: 500, autostart: true };
+    var params = { width: 1000, height: 1000, autostart: true };
     this.two = new Two(params).appendTo(this.refs.geoCanvas);
-    this.origin = { x: 200, y: 200 };
+    this.origin = { x: 300, y: 300 };
   }
 
   drawShapes(sides1, sides2, radius) {
-    var lineWidth = 2;
-    var outerRadius = radius * 1.5;
+    var lineWidth = 4;
+    var outerMultiply = 1.7;
+    this.radius = radius;
+    this.outerRadius = radius * outerMultiply;
     var shape1 = this.two.makePolygon(
       this.origin.x,
       this.origin.y,
@@ -28,14 +34,8 @@ class Geometry extends React.Component {
     var shape2 = this.two.makePolygon(
       this.origin.x,
       this.origin.y,
-      outerRadius,
+      this.outerRadius,
       sides2
-    );
-    var circle1 = this.two.makeCircle(this.origin.x, this.origin.y, radius);
-    var circle2 = this.two.makeCircle(
-      this.origin.x,
-      this.origin.y,
-      outerRadius
     );
 
     shape1.stroke = "orangered";
@@ -43,62 +43,109 @@ class Geometry extends React.Component {
     shape1.rotation = Math.PI + Math.PI / sides1;
     shape1.noFill();
     shape1.points = this.getPoints(shape1, sides1);
+    shape1.sides = sides1;
 
     shape2.stroke = "rgb(0, 200, 255)";
     shape2.linewidth = lineWidth;
     shape2.rotation = Math.PI + Math.PI / sides2;
     shape2.noFill();
     shape2.points = this.getPoints(shape2, sides2);
-
-    circle1.linewidth = lineWidth;
-    circle1.opacity = 0;
-    circle1.noFill();
-
-    circle2.linewidth = lineWidth;
-    circle2.opacity = 0;
-    circle2.noFill();
+    shape2.sides = sides2;
 
     this.shape1 = shape1;
     this.shape2 = shape2;
   }
 
-  initiateBeatCircles() {
-    this.beatCircle1 = this.two.makeCircle(200, 100, 15);
+  initiateBeatCircles(radius) {
+    this.beatCircle1 = this.two.makeCircle(
+      this.origin.x,
+      this.origin.y - this.radius,
+      radius
+    );
     this.beatCircle1.fill = "orangered";
     this.beatCircle1.noStroke();
-    this.beatCircle2 = this.two.makeCircle(200, 50, 10);
+    this.beatCircle2 = this.two.makeCircle(
+      this.origin.x,
+      this.origin.y - this.outerRadius,
+      radius
+    );
     this.beatCircle2.fill = "rgb(0, 200, 255)";
     this.beatCircle2.noStroke();
   }
 
-  startAnimation() {
-    TweenMax.to(this.beatCircle1.translation, 1, {
-      x: this.shape1.points[1].x,
-      y: this.shape1.points[1].y,
-      yoyo: true,
-      repeat: -1
-    });
+  timelineStart(duration) {
+    var clicker1 = new Tone.Player({
+      url: click1
+    }).toMaster();
+    var clicker2 = new Tone.Player({
+      url: click2
+    }).toMaster();
+    this.timeline1 = new TimelineMax({ repeat: -1 });
+    this.timeline2 = new TimelineMax({ repeat: -1 });
+    this.radiusFlash1 = new TimelineMax({ repeat: -1 });
+    this.radiusFlash2 = new TimelineMax({ repeat: -1 });
 
-    TweenMax.to(this.beatCircle1, 1, {
-      radius: 5,
-      ease: SlowMo.easeInOut,
-      yoyo: true,
-      repeat: -1
-    });
+    let points1 = this.shape1.points;
+    for (let i = 1; i <= points1.length; i++) {
+      this.timeline1.add(
+        TweenMax.to(this.beatCircle1.translation, 1, {
+          x: points1[i % this.shape1.sides].x,
+          y: points1[i % this.shape1.sides].y,
+          ease: Power2.easeIn,
+          onComplete: function() {
+            clicker1.start();
+          }
+        })
+      );
+    }
+    this.timeline1.duration(duration);
 
-    TweenMax.to(this.beatCircle2.translation, 1, {
-      x: this.shape2.points[1].x,
-      y: this.shape2.points[1].y,
-      yoyo: true,
-      repeat: -1
-    });
+    for (let i = 1; i <= points1.length; i++) {
+      this.radiusFlash1.add(
+        TweenMax.to(this.beatCircle1, 1, {
+          radius: 15,
+          ease: Power2.easeIn
+        })
+      );
+      this.radiusFlash1.add(
+        TweenMax.to(this.beatCircle1, 1, {
+          radius: 20,
+          ease: Power2.easeIn
+        })
+      );
+    }
+    this.radiusFlash1.duration(duration);
 
-    TweenMax.to(this.beatCircle2, 1, {
-      radius: 5,
-      ease: SlowMo.easeInOut,
-      yoyo: true,
-      repeat: -1
-    });
+    let points2 = this.shape2.points;
+    for (let i = 1; i <= points2.length; i++) {
+      this.timeline2.add(
+        TweenMax.to(this.beatCircle2.translation, 1, {
+          x: points2[i % this.shape2.sides].x,
+          y: points2[i % this.shape2.sides].y,
+          ease: Power2.easeIn,
+          onComplete: function() {
+            clicker2.start();
+          }
+        })
+      );
+    }
+    this.timeline2.duration(duration);
+
+    for (let i = 1; i <= points2.length; i++) {
+      this.radiusFlash2.add(
+        TweenMax.to(this.beatCircle2, 1, {
+          radius: 15,
+          ease: Power2.easeIn
+        })
+      );
+      this.radiusFlash2.add(
+        TweenMax.to(this.beatCircle2, 1, {
+          radius: 20,
+          ease: Power2.easeIn
+        })
+      );
+    }
+    this.radiusFlash2.duration(duration);
   }
 
   getPoints(shape, sides) {
