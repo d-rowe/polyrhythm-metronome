@@ -16,14 +16,14 @@ class Geometry extends React.Component {
       playing: false,
       ball: {
         inner: {
-          bigRadius: 30,
+          bigRadius: 25,
           smallRadius: 10,
           fill: colors[1],
           stroke: colors[1],
           radiusEasing: Power4.easeIn
         },
         outer: {
-          bigRadius: 30,
+          bigRadius: 25,
           smallRadius: 10,
           fill: colors[3],
           stroke: colors[3],
@@ -211,7 +211,7 @@ class Geometry extends React.Component {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.bigRadius,
-          opacity: 0.4,
+          opacity: 0.6,
           ease: this.state.ball.inner.radiusEasing
         })
       );
@@ -244,7 +244,7 @@ class Geometry extends React.Component {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.bigRadius,
-          opacity: 0.4,
+          opacity: 0.6,
           ease: this.state.ball.outer.radiusEasing
         })
       );
@@ -265,8 +265,9 @@ class Geometry extends React.Component {
       );
       points.push({ x: point[0], y: point[1] });
     }
-    points.push(points.shift());
-    return points.reverse();
+    // points.push(points.shift());
+    // points.reverse()
+    return points;
   }
 
   rotatePoints(cx, cy, x, y, angle) {

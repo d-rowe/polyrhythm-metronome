@@ -1,6 +1,7 @@
 import React from "react";
 import Geometry from "./components/Geometry";
 import "bulma/css/bulma.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import "./App.css";
 
 class App extends React.Component {
@@ -96,7 +97,11 @@ class App extends React.Component {
                   max="100000"
                 />
                 <button onClick={this.handleClick} className="button is-info">
-                  {this.state.playing ? "Stop" : "Play"}
+                  {this.state.playing ? (
+                    <i class="fas fa-stop" />
+                  ) : (
+                    <i class="fas fa-play" />
+                  )}
                 </button>
               </div>
             </div>
