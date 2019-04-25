@@ -66,37 +66,39 @@ class App extends React.Component {
         <div className="container">
           <div className="columns">
             <div className="column vCenter">
-              Tempo
-              <input
-                onInput={this.handleTempo}
-                className="input"
-                type="number"
-                defaultValue="100"
-                min="3"
-                max="400"
-              />
-              <input
-                ref="sides1"
-                onInput={this.handleSides1}
-                className="input"
-                type="number"
-                defaultValue="3"
-                min="3"
-                max="100000"
-              />
-              Against
-              <input
-                ref="sides2"
-                onInput={this.handleSides2}
-                className="input"
-                type="number"
-                defaultValue="4"
-                min="3"
-                max="100000"
-              />
-              <button onClick={this.handleClick} className="button is-info">
-                {this.state.playing ? "Stop" : "Play"}
-              </button>
+              <div className="box">
+                Tempo
+                <input
+                  onInput={this.handleTempo}
+                  className="input"
+                  type="number"
+                  defaultValue="100"
+                  min="3"
+                  max="1000"
+                />
+                <input
+                  ref="sides1"
+                  onInput={this.handleSides1}
+                  className="input"
+                  type="number"
+                  defaultValue="3"
+                  min="3"
+                  max="100000"
+                />
+                Against
+                <input
+                  ref="sides2"
+                  onInput={this.handleSides2}
+                  className="input"
+                  type="number"
+                  defaultValue="4"
+                  min="3"
+                  max="100000"
+                />
+                <button onClick={this.handleClick} className="button is-info">
+                  {this.state.playing ? "Stop" : "Play"}
+                </button>
+              </div>
             </div>
             <div className="column is-three-fifths">
               <Geometry

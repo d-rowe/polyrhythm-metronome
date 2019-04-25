@@ -1,16 +1,16 @@
 import React from "react";
 import Tone from "tone";
 import Two from "two.js";
-import { TweenMax, Power2, Power3 } from "gsap/TweenMax";
+import { TweenMax, Power2, Power4 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
-import click1 from "../sounds/click1.wav";
-import click2 from "../sounds/click2.wav";
+import hi from "../sounds/hi.ogg";
+import low from "../sounds/low.ogg";
 import "./Geometry.css";
 
 class Geometry extends React.Component {
   constructor(props) {
     super(props);
-    let colors = ["#b10f2e", "#b10f2e", "#466699", "#466699"];
+    let colors = ["#ea3f3c", "#ea3f3c", "#2289b5", "#2289b5"];
     this.state = {
       tempo: 100,
       playing: false,
@@ -20,7 +20,7 @@ class Geometry extends React.Component {
           smallRadius: 10,
           fill: colors[1],
           stroke: colors[1],
-          radiusEasing: Power3.easeIn
+          radiusEasing: Power4.easeIn
         },
         outer: {
           bigRadius: 30,
@@ -31,7 +31,7 @@ class Geometry extends React.Component {
         }
       },
       polygons: {
-        lineWidth: 5,
+        lineWidth: 2,
         inner: { color: colors[0], sides: 3 },
         outer: { color: colors[2], sides: 4 }
       },
@@ -174,10 +174,10 @@ class Geometry extends React.Component {
   timelineSetup() {
     let duration = (60 / this.state.tempo) * this.state.polygons.outer.sides;
     let clicker1 = new Tone.Player({
-      url: click1
+      url: hi
     }).toMaster();
     let clicker2 = new Tone.Player({
-      url: click2
+      url: low
     }).toMaster();
 
     this.timeline1 = new TimelineMax({ repeat: -1 });
@@ -204,12 +204,14 @@ class Geometry extends React.Component {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.smallRadius,
-          ease: this.state.ball.inner.radiusEasing
+          opacity: 1,
+          ease: Power4.easeOut
         })
       );
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.bigRadius,
+          opacity: 0.4,
           ease: this.state.ball.inner.radiusEasing
         })
       );
@@ -235,12 +237,14 @@ class Geometry extends React.Component {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.smallRadius,
-          ease: this.state.ball.outer.radiusEasing
+          opacity: 1,
+          ease: Power4.easeOut
         })
       );
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.bigRadius,
+          opacity: 0.4,
           ease: this.state.ball.outer.radiusEasing
         })
       );
