@@ -12,7 +12,7 @@ class Geometry extends React.Component {
     super(props);
     let colors = ["#b10f2e", "#b10f2e", "#466699", "#355282"];
     this.state = {
-      tempo: 200,
+      tempo: 100,
       ball: {
         inner: {
           bigRadius: 30,
@@ -27,12 +27,12 @@ class Geometry extends React.Component {
           fill: colors[3],
           stroke: colors[3],
           radiusEasing: Power2.easeIn
-        },
+        }
       },
-      polygon: {
+      polygons: {
         lineWidth: 5,
-        inner: { color: colors[0], sides: 4 },
-        outer: { color: colors[2], sides: 5 }
+        inner: { color: colors[0], sides: 3 },
+        outer: { color: colors[2], sides: 4 }
       },
       render: {
         origin: { x: 250, y: 250 },
@@ -43,6 +43,7 @@ class Geometry extends React.Component {
       }
     };
   }
+
   componentDidMount() {
     this.initializeTwo();
     this.drawShapes();
@@ -52,6 +53,53 @@ class Geometry extends React.Component {
     mySVG.setAttribute("viewBox", "0 0 500 500");
     mySVG.setAttribute("class", "geoSVG");
     // mySVG.setAttribute("shape-rendering", "geometricPrecision");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.sides1 !== prevProps.sides1) {
+      let polygons = { ...this.state.polygons };
+      polygons.inner.sides = this.props.sides1;
+      this.setState({ polygons: polygons });
+      this.restart();
+    }
+
+    if (this.props.sides2 !== prevProps.sides2) {
+      let polygons = { ...this.state.polygons };
+      polygons.outer.sides = this.props.sides2;
+      this.setState({ polygons: polygons });
+      this.restart();
+    }
+
+    if (this.props.playing !== prevProps.playing) {
+      if (this.props.playing) {
+        this.play();
+      } else {
+        this.stop();
+      }
+    }
+  }
+
+  restart() {
+    this.stop();
+    this.play();
+  }
+
+  play() {
+    this.timeline1.play();
+    this.timeline2.play();
+    this.radiusFlash1.play();
+    this.radiusFlash2.play();
+    this.initiateBeatCircles();
+    this.timelineSetup();
+  }
+
+  stop() {
+    this.timeline1.remove(this.timeline1.getChildren());
+    this.timeline2.remove(this.timeline2.getChildren());
+    this.radiusFlash1.remove();
+    this.radiusFlash2.remove();
+    this.two.clear();
+    this.drawShapes();
   }
 
   initializeTwo() {
@@ -68,28 +116,28 @@ class Geometry extends React.Component {
       this.state.render.origin.x,
       this.state.render.origin.y,
       this.state.render.innerRadius,
-      this.state.polygon.inner.sides
+      this.state.polygons.inner.sides
     );
     let shape2 = this.two.makePolygon(
       this.state.render.origin.x,
       this.state.render.origin.y,
       this.state.render.outerRadius,
-      this.state.polygon.outer.sides
+      this.state.polygons.outer.sides
     );
 
-    shape1.stroke = this.state.polygon.inner.color;
-    shape1.linewidth = this.state.polygon.lineWidth;
-    shape1.rotation = Math.PI + Math.PI / this.state.polygon.inner.sides;
+    shape1.stroke = this.state.polygons.inner.color;
+    shape1.linewidth = this.state.polygons.lineWidth;
+    shape1.rotation = Math.PI + Math.PI / this.state.polygons.inner.sides;
     shape1.noFill();
-    shape1.points = this.getPoints(shape1, this.state.polygon.inner.sides);
-    shape1.sides = this.state.polygon.inner.sides;
+    shape1.points = this.getPoints(shape1, this.state.polygons.inner.sides);
+    shape1.sides = this.state.polygons.inner.sides;
 
-    shape2.stroke = this.state.polygon.outer.color;
-    shape2.linewidth = this.state.polygon.lineWidth;
-    shape2.rotation = Math.PI + Math.PI / this.state.polygon.outer.sides;
+    shape2.stroke = this.state.polygons.outer.color;
+    shape2.linewidth = this.state.polygons.lineWidth;
+    shape2.rotation = Math.PI + Math.PI / this.state.polygons.outer.sides;
     shape2.noFill();
-    shape2.points = this.getPoints(shape2, this.state.polygon.outer.sides);
-    shape2.sides = this.state.polygon.outer.sides;
+    shape2.points = this.getPoints(shape2, this.state.polygons.outer.sides);
+    shape2.sides = this.state.polygons.outer.sides;
 
     this.shape1 = shape1;
     this.shape2 = shape2;
@@ -113,7 +161,7 @@ class Geometry extends React.Component {
   }
 
   timelineSetup() {
-    let duration = (60 / this.state.tempo) * this.state.polygon.outer.sides;
+    let duration = (60 / this.state.tempo) * this.state.polygons.outer.sides;
     let clicker1 = new Tone.Player({
       url: click1
     }).toMaster();

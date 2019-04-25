@@ -1,7 +1,17 @@
-html,
+/* html,
 body,
 #root,
 .geoCanvas {
   height: 100%;
   width: 100%;
+} */
+
+.input[type="number"] {
+  width: 5rem;
+}
+
+.vCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
