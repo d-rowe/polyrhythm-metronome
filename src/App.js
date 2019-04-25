@@ -34,17 +34,11 @@ class App extends React.Component {
   handleSides1 = e => {
     if (e.target.value !== "") {
       this.sides1 = parseInt(e.target.value);
-      if (this.sides1 < 3) {
-        this.refs.sides1.value = 3;
-        this.sides1 = 3;
-        this.setState({ sides1: 3 });
-      } else {
-        this.setState({ sides1: this.sides1 });
-        if (this.sides1 >= this.sides2) {
-          this.sides2 = this.sides1 + 1;
-          this.refs.sides2.value = this.sides2;
-          this.setState({ sides2: this.sides2 });
-        }
+      this.setState({ sides1: this.sides1 });
+      if (this.sides1 >= this.sides2) {
+        this.sides2 = this.sides1 + 1;
+        this.refs.sides2.value = this.sides2;
+        this.setState({ sides2: this.sides2 });
       }
     }
   };
@@ -52,18 +46,7 @@ class App extends React.Component {
   handleSides2 = e => {
     if (e.target.value !== "") {
       this.sides2 = parseInt(e.target.value);
-      if (this.sides2 < 4) {
-        this.refs.sides2.value = 4;
-        this.sides2 = 4;
-        this.setState({ sides2: 4 });
-      } else {
-        this.setState({ sides2: this.sides2 });
-        if (this.sides2 <= this.sides1) {
-          this.sides1 = this.sides1 - 1;
-          this.refs.sides1.value = this.sides1;
-          this.setState({ sides1: this.sides1 });
-        }
-      }
+      this.setState({ sides2: this.sides2 });
     }
   };
 
@@ -106,8 +89,8 @@ class App extends React.Component {
                       className="input is-info"
                       type="number"
                       defaultValue="4"
-                      min="3"
-                      max="100000"
+                      // min="3"
+                      // max="100000"
                     />
                     <input
                       ref="sides1"
@@ -115,8 +98,8 @@ class App extends React.Component {
                       className="input is-danger"
                       type="number"
                       defaultValue="3"
-                      min="3"
-                      max="100000"
+                      // min="3"
+                      // max="100000"
                     />
                   </div>
                 </div>
@@ -134,11 +117,10 @@ class App extends React.Component {
           </div>
         </section>
         <div class="content has-text-centered foot">
-          <p><strong>
-
-            made by {" "}
-            <a href="https://danielrmusic.com">daniel rowe</a>
-          </strong>
+          <p>
+            <strong>
+              made by <a href="https://danielrmusic.com">daniel rowe</a>
+            </strong>
           </p>
         </div>
       </div>
