@@ -2,7 +2,7 @@ import React from "react";
 import Geometry from "./components/Geometry";
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import "./App.css";
+import "./App.scss";
 
 class App extends React.Component {
   constructor(props) {
@@ -68,11 +68,11 @@ class App extends React.Component {
           <div className="columns">
             <div className="column vCenter">
               <div className="box shadow">
-              <div className="bar">
-              <h6 class="title is-6">polyrhythms</h6>
-              {/* <br/>
+                <div className="bar">
+                  <h6 class="title is-6">polyrhythm metronome</h6>
+                  {/* <br/>
               <h6 class="subtitle is-6">metronome</h6> */}
-              </div>
+                </div>
                 <div className="bar">
                   <p className="paditem">tempo</p>
                   <input
@@ -83,7 +83,10 @@ class App extends React.Component {
                     min="3"
                     max="1000"
                   />
-                  <button onClick={this.handleClick} className="button is-info paditem">
+                  <button
+                    onClick={this.handleClick}
+                    className="button is-info paditem"
+                  >
                     {this.state.playing ? (
                       <i class="fas fa-stop" />
                     ) : (

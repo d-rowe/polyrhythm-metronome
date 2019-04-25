@@ -5,12 +5,17 @@ import { TweenMax, Power2, Power4 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
 import hi from "../sounds/hi.ogg";
 import low from "../sounds/low.ogg";
-import "./Geometry.css";
+import "./Geometry.scss";
 
 class Geometry extends React.Component {
   constructor(props) {
     super(props);
-    let colors = ["#ea3f3c", "#ea3f3c", "#2289b5", "#2289b5"];
+    let colors = [
+      "hsl(348, 100%, 61%)",
+      "hsl(348, 100%, 61%)",
+      "hsl(204, 86%, 53%)",
+      "hsl(204, 86%, 53%)"
+    ];
     this.state = {
       tempo: 100,
       playing: false,
