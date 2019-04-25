@@ -6,6 +6,10 @@ body,
   width: 100%;
 } */
 
+#root {
+  background: "#fdfffc";
+}
+
 .input[type="number"] {
   width: 5rem;
 }

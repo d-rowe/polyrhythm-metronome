@@ -10,7 +10,7 @@ import "./Geometry.css";
 class Geometry extends React.Component {
   constructor(props) {
     super(props);
-    let colors = ["#b10f2e", "#b10f2e", "#466699", "#355282"];
+    let colors = ["#b10f2e", "#b10f2e", "#466699", "#466699"];
     this.state = {
       tempo: 100,
       playing: false,
@@ -24,7 +24,7 @@ class Geometry extends React.Component {
         },
         outer: {
           bigRadius: 30,
-          smallRadius: 15,
+          smallRadius: 10,
           fill: colors[3],
           stroke: colors[3],
           radiusEasing: Power2.easeIn
@@ -55,6 +55,12 @@ class Geometry extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.tempo !== prevProps.tempo) {
+      this.setState({ tempo: this.props.tempo });
+      this.stop();
+      this.props.handleStop();
+    }
+
     if (this.props.sides1 !== prevProps.sides1) {
       let polygons = { ...this.state.polygons };
       polygons.inner.sides = this.props.sides1;
@@ -173,6 +179,7 @@ class Geometry extends React.Component {
     let clicker2 = new Tone.Player({
       url: click2
     }).toMaster();
+
     this.timeline1 = new TimelineMax({ repeat: -1 });
     this.timeline2 = new TimelineMax({ repeat: -1 });
     this.radiusFlash1 = new TimelineMax({ repeat: -1 });
@@ -184,7 +191,7 @@ class Geometry extends React.Component {
         TweenMax.to(this.beatCircle1.translation, 1, {
           x: points1[i % this.shape1.sides].x,
           y: points1[i % this.shape1.sides].y,
-          ease: Power2.easeIn,
+          ease: this.state.ball.inner.radiusEasing,
           onComplete: function() {
             clicker1.start();
           }
