@@ -26,37 +26,43 @@ class App extends React.Component {
   };
 
   handleTempo = e => {
-    this.setState({ tempo: parseInt(e.target.value) });
+    if (e.target.value !== "") {
+      this.setState({ tempo: parseInt(e.target.value) });
+    }
   };
 
   handleSides1 = e => {
-    this.sides1 = parseInt(e.target.value);
-    if (this.sides1 < 3) {
-      this.refs.sides1.value = 3;
-      this.sides1 = 3;
-      this.setState({ sides1: 3 });
-    } else {
-      this.setState({ sides1: this.sides1 });
-      if (this.sides1 >= this.sides2) {
-        this.sides2 = this.sides1 + 1;
-        this.refs.sides2.value = this.sides2;
-        this.setState({ sides2: this.sides2 });
+    if (e.target.value !== "") {
+      this.sides1 = parseInt(e.target.value);
+      if (this.sides1 < 3) {
+        this.refs.sides1.value = 3;
+        this.sides1 = 3;
+        this.setState({ sides1: 3 });
+      } else {
+        this.setState({ sides1: this.sides1 });
+        if (this.sides1 >= this.sides2) {
+          this.sides2 = this.sides1 + 1;
+          this.refs.sides2.value = this.sides2;
+          this.setState({ sides2: this.sides2 });
+        }
       }
     }
   };
 
   handleSides2 = e => {
-    this.sides2 = parseInt(e.target.value);
-    if (this.sides2 < 4) {
-      this.refs.sides2.value = 4;
-      this.sides2 = 4;
-      this.setState({ sides2: 4 });
-    } else {
-      this.setState({ sides2: this.sides2 });
-      if (this.sides2 <= this.sides1) {
-        this.sides1 = this.sides1 - 1;
-        this.refs.sides1.value = this.sides1;
-        this.setState({ sides1: this.sides1 });
+    if (e.target.value !== "") {
+      this.sides2 = parseInt(e.target.value);
+      if (this.sides2 < 4) {
+        this.refs.sides2.value = 4;
+        this.sides2 = 4;
+        this.setState({ sides2: 4 });
+      } else {
+        this.setState({ sides2: this.sides2 });
+        if (this.sides2 <= this.sides1) {
+          this.sides1 = this.sides1 - 1;
+          this.refs.sides1.value = this.sides1;
+          this.setState({ sides1: this.sides1 });
+        }
       }
     }
   };
@@ -70,8 +76,6 @@ class App extends React.Component {
               <div className="box shadow">
                 <div className="bar">
                   <h6 class="title is-6">polyrhythm metronome</h6>
-                  {/* <br/>
-              <h6 class="subtitle is-6">metronome</h6> */}
                 </div>
                 <div className="bar">
                   <p className="paditem">tempo</p>
