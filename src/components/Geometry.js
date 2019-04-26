@@ -1,10 +1,8 @@
 import React from "react";
-import Tone from "tone";
 import Two from "two.js";
+import { orangeClick, blueClick } from "../audio/sampler";
 import { TweenMax, Power2, Power4 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
-import hi from "../sounds/hi.ogg";
-import low from "../sounds/low.ogg";
 import "./Geometry.scss";
 
 class Geometry extends React.Component {
@@ -181,12 +179,6 @@ class Geometry extends React.Component {
 
   timelineSetup() {
     let duration = (60 / this.state.tempo) * this.state.polygons.outer.sides;
-    let clicker1 = new Tone.Player({
-      url: hi
-    }).toMaster();
-    let clicker2 = new Tone.Player({
-      url: low
-    }).toMaster();
 
     this.timeline1 = new TimelineMax({ repeat: -1 });
     this.timeline2 = new TimelineMax({ repeat: -1 });
@@ -200,8 +192,8 @@ class Geometry extends React.Component {
           x: points1[i % this.shape1.sides].x,
           y: points1[i % this.shape1.sides].y,
           ease: this.state.ball.inner.radiusEasing,
-          onComplete: function() {
-            clicker1.start();
+          onStart: function() {
+            orangeClick.start();
           }
         })
       );
@@ -233,8 +225,8 @@ class Geometry extends React.Component {
           x: points2[i % this.shape2.sides].x,
           y: points2[i % this.shape2.sides].y,
           ease: Power2.easeIn,
-          onComplete: function() {
-            clicker2.start();
+          onStart: function() {
+            blueClick.start();
           }
         })
       );
