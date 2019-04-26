@@ -64,7 +64,7 @@ class App extends React.Component {
                   <div className="bar">
                     <p className="paditem">tempo</p>
                     <input
-                      onInput={this.handleTempo}
+                      onChange={this.handleTempo}
                       className="input paditem"
                       type="number"
                       defaultValue="100"
@@ -116,13 +116,6 @@ class App extends React.Component {
             </div>
           </div>
         </section>
-        <div class="content has-text-centered foot">
-          <p>
-            <strong>
-              made by <a href="https://danielrmusic.com">daniel rowe</a>
-            </strong>
-          </p>
-        </div>
       </div>
     );
   }
