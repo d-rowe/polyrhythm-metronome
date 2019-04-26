@@ -17,6 +17,24 @@ class App extends React.Component {
     };
   }
 
+  keyTempo = e => {
+    if (e.keyCode === 13) {
+      this.handleTempo(e);
+    }
+  };
+
+  keySides1 = e => {
+    if (e.keyCode === 13) {
+      this.handleSides1(e);
+    }
+  };
+
+  keySides2 = e => {
+    if (e.keyCode === 13) {
+      this.handleSides2(e);
+    }
+  };
+
   handleStop = () => {
     this.setState({ playing: false });
   };
@@ -26,27 +44,61 @@ class App extends React.Component {
   };
 
   handleTempo = e => {
+    if (e.target.value > 1000) {
+      e.target.value = 1000;
+    }
+    if (e.target.value < 20) {
+      e.target.value = 20;
+    }
     if (e.target.value !== "") {
       this.setState({ tempo: parseInt(e.target.value) });
     }
   };
 
   handleSides1 = e => {
-    if (e.target.value !== "") {
-      this.sides1 = parseInt(e.target.value);
-      this.setState({ sides1: this.sides1 });
-      if (this.sides1 >= this.sides2) {
-        this.sides2 = this.sides1 + 1;
-        this.refs.sides2.value = this.sides2;
-        this.setState({ sides2: this.sides2 });
+    if (e.target.value >= 1000) {
+      e.target.value = 999;
+    }
+    if (e.target.value >= 3) {
+      if (e.target.value !== "") {
+        this.sides1 = parseInt(e.target.value);
+        this.setState({ sides1: this.sides1 });
+        if (this.sides1 >= this.sides2) {
+          this.sides2 = this.sides1 + 1;
+          this.refs.sides2.value = this.sides2;
+          this.setState({ sides2: this.sides2 });
+        }
       }
+    } else {
+      this.refs.sides1.value = 3;
+      this.sides1 = 3;
+      this.setState({ sides1: 3 });
     }
   };
 
   handleSides2 = e => {
-    if (e.target.value !== "") {
-      this.sides2 = parseInt(e.target.value);
-      this.setState({ sides2: this.sides2 });
+    if (e.target.value > 1000) {
+      e.target.value = 1000;
+    }
+    if (e.target.value >= 4) {
+      if (e.target.value !== "") {
+        this.sides2 = parseInt(e.target.value);
+        this.setState({ sides2: this.sides2 });
+        if (this.sides2 <= this.sides1) {
+          this.sides1 = this.sides2 - 1;
+          this.refs.sides1.value = this.sides1;
+          this.setState({ sides1: this.sides1 });
+        }
+      }
+    } else {
+      this.refs.sides2.value = 4;
+      this.sides2 = 4;
+      this.setState({ sides2: 4 });
+      if (this.sides2 <= this.sides1) {
+        this.sides1 = this.sides2 - 1;
+        this.refs.sides1.value = this.sides1;
+        this.setState({ sides1: this.sides1 });
+      }
     }
   };
 
@@ -64,7 +116,8 @@ class App extends React.Component {
                   <div className="bar">
                     <p className="paditem">tempo</p>
                     <input
-                      onChange={this.handleTempo}
+                      onBlur={this.handleTempo}
+                      onKeyDown={this.keyTempo}
                       className="input paditem"
                       type="number"
                       defaultValue="100"
@@ -85,8 +138,9 @@ class App extends React.Component {
                   <div className="bar">
                     <input
                       ref="sides2"
-                      onInput={this.handleSides2}
-                      className="input is-info"
+                      onBlur={this.handleSides2}
+                      onKeyDown={this.keySides2}
+                      className="input is-info side"
                       type="number"
                       defaultValue="4"
                       // min="3"
@@ -94,8 +148,9 @@ class App extends React.Component {
                     />
                     <input
                       ref="sides1"
-                      onInput={this.handleSides1}
-                      className="input is-danger"
+                      onBlur={this.handleSides1}
+                      onKeyDown={this.keySides1}
+                      className="input is-danger side"
                       type="number"
                       defaultValue="3"
                       // min="3"
