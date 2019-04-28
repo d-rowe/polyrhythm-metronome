@@ -1,6 +1,6 @@
 import React from "react";
 import Geometry from "./components/Geometry";
-import Sampler from "./audio/Sampler";
+import Sampler from "./audio/sampler";
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./App.scss";
@@ -15,7 +15,7 @@ class App extends React.Component {
       tempo: 100,
       sides1: this.sides1,
       sides2: this.sides2,
-      playing: false,
+      playing: false
     };
   }
 
