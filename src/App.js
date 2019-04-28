@@ -1,5 +1,6 @@
 import React from "react";
 import Geometry from "./components/Geometry";
+import Sampler from "./audio/Sampler";
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./App.scss";
@@ -7,13 +8,14 @@ import "./App.scss";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.sampler = new Sampler();
     this.sides1 = 3;
     this.sides2 = 4;
     this.state = {
       tempo: 100,
       sides1: this.sides1,
       sides2: this.sides2,
-      playing: false
+      playing: false,
     };
   }
 
@@ -104,14 +106,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div class="row">
+      <div className="row">
         <section className="section">
           <div className="container">
             <div className="columns">
               <div className="column vCenter">
                 <div className="box shadow">
                   <div className="bar">
-                    <h6 class="title is-6">polyrhythm metronome</h6>
+                    <h6 className="title is-6">polyrhythm metronome</h6>
                   </div>
                   <div className="bar">
                     <p className="paditem">tempo</p>
@@ -129,9 +131,9 @@ class App extends React.Component {
                       className="button is-info paditem"
                     >
                       {this.state.playing ? (
-                        <i class="fas fa-stop" />
+                        <i className="fas fa-stop" />
                       ) : (
-                        <i class="fas fa-play" />
+                        <i className="fas fa-play" />
                       )}
                     </button>
                   </div>
@@ -161,6 +163,7 @@ class App extends React.Component {
               </div>
               <div className="column is-three-fifths">
                 <Geometry
+                  sampler={this.sampler}
                   tempo={this.state.tempo}
                   playing={this.state.playing}
                   sides1={this.state.sides1}
