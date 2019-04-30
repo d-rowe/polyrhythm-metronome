@@ -1,6 +1,5 @@
 import React from "react";
 import Two from "two.js";
-import { orangeClick, blueClick } from "../audio/sampler";
 import { TweenMax, Power2, Power4 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
 import "./Geometry.scss";
@@ -8,6 +7,7 @@ import "./Geometry.scss";
 class Geometry extends React.Component {
   constructor(props) {
     super(props);
+    this.sampler = this.props.sampler;
     let colors = [
       "hsl(348, 100%, 61%)",
       "hsl(348, 100%, 61%)",
@@ -18,7 +18,6 @@ class Geometry extends React.Component {
       tempo: 100,
       playing: false,
       ball: {
-        animationOpacity: 0.7,
         inner: {
           bigRadius: 25,
           smallRadius: 10,
@@ -52,13 +51,9 @@ class Geometry extends React.Component {
   componentDidMount() {
     this.initializeTwo();
     this.drawShapes();
-    var mySVG = this.refs.geoCanvas.children[0];
-    mySVG.setAttribute("viewBox", "0 0 500 500");
-    mySVG.setAttribute("class", "geoSVG");
-    // mySVG.setAttribute("shape-rendering", "geometricPrecision");
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props.tempo !== prevProps.tempo) {
       this.setState({ tempo: this.props.tempo });
       this.stop();
@@ -84,6 +79,22 @@ class Geometry extends React.Component {
         this.play();
       } else {
         this.stop();
+      }
+    }
+
+    if (this.props.redMute !== prevProps.redMute) {
+      if (this.props.redMute) {
+        this.beatCircle1.opacity = 0;
+      } else {
+        this.beatCircle1.opacity = 1;
+      }
+    }
+
+    if (this.props.blueMute !== prevProps.blueMute) {
+      if (this.props.blueMute) {
+        this.beatCircle2.opacity = 0;
+      } else {
+        this.beatCircle2.opacity = 1;
       }
     }
   }
@@ -124,6 +135,10 @@ class Geometry extends React.Component {
       autostart: true
     };
     this.two = new Two(params).appendTo(this.refs.geoCanvas);
+    var mySVG = this.refs.geoCanvas.children[0];
+    mySVG.setAttribute("viewBox", "0 0 500 500");
+    mySVG.setAttribute("class", "geoSVG");
+    // mySVG.setAttribute("shape-rendering", "geometricPrecision");
   }
 
   drawShapes() {
@@ -166,7 +181,6 @@ class Geometry extends React.Component {
     );
     this.beatCircle1.fill = this.state.ball.inner.fill;
     this.beatCircle1.stroke = this.state.ball.inner.stroke;
-    this.beatCircle1.opacity = this.state.ball.animationOpacity;
     this.beatCircle2 = this.two.makeCircle(
       this.state.render.origin.x,
       this.state.render.origin.y - this.state.render.outerRadius,
@@ -174,10 +188,10 @@ class Geometry extends React.Component {
     );
     this.beatCircle2.fill = this.state.ball.outer.fill;
     this.beatCircle2.stroke = this.state.ball.outer.stroke;
-    this.beatCircle2.opacity = this.state.ball.animationOpacity;
   }
 
   timelineSetup() {
+    let sampler = this.sampler;
     let duration = (60 / this.state.tempo) * this.state.polygons.outer.sides;
 
     this.timeline1 = new TimelineMax({ repeat: -1 });
@@ -193,7 +207,7 @@ class Geometry extends React.Component {
           y: points1[i % this.shape1.sides].y,
           ease: this.state.ball.inner.radiusEasing,
           onStart: function() {
-            orangeClick.start();
+            sampler.redClick.start();
           }
         })
       );
@@ -204,14 +218,12 @@ class Geometry extends React.Component {
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.smallRadius,
-          opacity: 1,
           ease: Power4.easeOut
         })
       );
       this.radiusFlash1.add(
         TweenMax.to(this.beatCircle1, 1, {
           radius: this.state.ball.inner.bigRadius,
-          opacity: this.state.ball.animationOpacity,
           ease: this.state.ball.inner.radiusEasing
         })
       );
@@ -226,7 +238,7 @@ class Geometry extends React.Component {
           y: points2[i % this.shape2.sides].y,
           ease: Power2.easeIn,
           onStart: function() {
-            blueClick.start();
+            sampler.blueClick.start();
           }
         })
       );
@@ -237,14 +249,12 @@ class Geometry extends React.Component {
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.smallRadius,
-          opacity: 1,
           ease: Power4.easeOut
         })
       );
       this.radiusFlash2.add(
         TweenMax.to(this.beatCircle2, 1, {
           radius: this.state.ball.outer.bigRadius,
-          opacity: this.state.ball.animationOpacity,
           ease: this.state.ball.outer.radiusEasing
         })
       );

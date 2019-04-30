@@ -14,7 +14,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.4rem;
+}
+
+.toggleButton {
+  border: none;
+}
+
+.polybar {
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: space-between;
 }
 
 .paditem {

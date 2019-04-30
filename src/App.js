@@ -1,5 +1,6 @@
 import React from "react";
 import Geometry from "./components/Geometry";
+import Sampler from "./audio/sampler";
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./App.scss";
@@ -7,15 +8,38 @@ import "./App.scss";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.sampler = new Sampler();
     this.sides1 = 3;
     this.sides2 = 4;
     this.state = {
       tempo: 100,
       sides1: this.sides1,
       sides2: this.sides2,
-      playing: false
+      playing: false,
+      blueMute: false,
+      redMute: false
     };
   }
+
+  toggleBlue = () => {
+    if (this.state.blueMute) {
+      this.sampler.blueClick.volume.value = 0;
+    } else {
+      this.sampler.blueClick.volume.value = -100;
+    }
+    let blueMute = !this.state.blueMute;
+    this.setState({ blueMute: blueMute });
+  };
+
+  toggleRed = () => {
+    if (this.state.redMute) {
+      this.sampler.redClick.volume.value = 0;
+    } else {
+      this.sampler.redClick.volume.value = -100;
+    }
+    let redMute = !this.state.redMute;
+    this.setState({ redMute: redMute });
+  };
 
   keyTempo = e => {
     if (e.keyCode === 13) {
@@ -104,14 +128,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div class="row">
+      <div className="row">
         <section className="section">
           <div className="container">
             <div className="columns">
               <div className="column vCenter">
                 <div className="box shadow">
                   <div className="bar">
-                    <h6 class="title is-6">polyrhythm metronome</h6>
+                    <h6 className="title is-6">polyrhythm metronome</h6>
                   </div>
                   <div className="bar">
                     <p className="paditem">tempo</p>
@@ -129,38 +153,67 @@ class App extends React.Component {
                       className="button is-info paditem"
                     >
                       {this.state.playing ? (
-                        <i class="fas fa-stop" />
+                        <i className="fas fa-stop" />
                       ) : (
-                        <i class="fas fa-play" />
+                        <i className="fas fa-play" />
                       )}
                     </button>
                   </div>
                   <div className="bar">
-                    <input
-                      ref="sides2"
-                      onBlur={this.handleSides2}
-                      onKeyDown={this.keySides2}
-                      className="input is-info side"
-                      type="number"
-                      defaultValue="4"
-                      // min="3"
-                      // max="100000"
-                    />
-                    <input
-                      ref="sides1"
-                      onBlur={this.handleSides1}
-                      onKeyDown={this.keySides1}
-                      className="input is-danger side"
-                      type="number"
-                      defaultValue="3"
-                      // min="3"
-                      // max="100000"
-                    />
+                    <div className="polybar">
+                      <div className="bar">
+                        <input
+                          ref="sides2"
+                          onBlur={this.handleSides2}
+                          onKeyDown={this.keySides2}
+                          className="input is-info side"
+                          type="number"
+                          defaultValue="4"
+                        />
+                        <button
+                          className="button toggleButton"
+                          onClick={this.toggleBlue}
+                        >
+                          <i
+                            className={
+                              this.state.blueMute
+                                ? "fas fa-volume-mute"
+                                : "fas fa-volume-up"
+                            }
+                          />
+                        </button>
+                      </div>
+                      <div className="bar">
+                        <input
+                          ref="sides1"
+                          onBlur={this.handleSides1}
+                          onKeyDown={this.keySides1}
+                          className="input is-danger side"
+                          type="number"
+                          defaultValue="3"
+                        />
+                        <button
+                          className="button toggleButton"
+                          onClick={this.toggleRed}
+                        >
+                          <i
+                            className={
+                              this.state.redMute
+                                ? "fas fa-volume-mute"
+                                : "fas fa-volume-up"
+                            }
+                          />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="column is-three-fifths">
                 <Geometry
+                  redMute={this.state.redMute}
+                  blueMute={this.state.blueMute}
+                  sampler={this.sampler}
                   tempo={this.state.tempo}
                   playing={this.state.playing}
                   sides1={this.state.sides1}
