@@ -4,8 +4,8 @@ import low from "../sounds/low.ogg";
 
 export default class Sampler {
   constructor() {
-    this.bluePanVol = new Tone.PanVol(0.5, 0).toMaster();
-    this.redPanVol = new Tone.PanVol(-0.5, 0).toMaster();
+    this.bluePanVol = new Tone.PanVol(0, 0).toMaster();
+    this.redPanVol = new Tone.PanVol(0, 0).toMaster();
     this.blueClick = new Tone.Player({
       url: low
     }).connect(this.bluePanVol);
