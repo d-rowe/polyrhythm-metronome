@@ -8,6 +8,7 @@ class Geometry extends React.Component {
   constructor(props) {
     super(props);
     this.sampler = this.props.sampler;
+    this.opacitys = [1, 1];
     let colors = [
       "hsl(348, 100%, 61%)",
       "hsl(348, 100%, 61%)",
@@ -51,6 +52,7 @@ class Geometry extends React.Component {
   componentDidMount() {
     this.initializeTwo();
     this.drawShapes();
+    this.initiateBeatCircles();
   }
 
   componentDidUpdate(prevProps) {
@@ -85,16 +87,20 @@ class Geometry extends React.Component {
     if (this.props.redMute !== prevProps.redMute) {
       if (this.props.redMute) {
         this.beatCircle1.opacity = 0;
+        this.opacitys[1] = 0;
       } else {
         this.beatCircle1.opacity = 1;
+        this.opacitys[1] = 1;
       }
     }
 
     if (this.props.blueMute !== prevProps.blueMute) {
       if (this.props.blueMute) {
         this.beatCircle2.opacity = 0;
+        this.opacitys[0] = 0;
       } else {
         this.beatCircle2.opacity = 1;
+        this.opacitys[0] = 1;
       }
     }
   }
@@ -107,8 +113,9 @@ class Geometry extends React.Component {
   }
 
   play() {
+    this.beatCircle1.opacity = this.opacitys[1];
+    this.beatCircle2.opacity = this.opacitys[0];
     this.setState({ playing: true });
-    this.initiateBeatCircles();
     this.timelineSetup();
     this.timeline1.play();
     this.timeline2.play();
@@ -126,6 +133,7 @@ class Geometry extends React.Component {
     }
     this.two.clear();
     this.drawShapes();
+    this.initiateBeatCircles();
   }
 
   initializeTwo() {
@@ -188,6 +196,9 @@ class Geometry extends React.Component {
     );
     this.beatCircle2.fill = this.state.ball.outer.fill;
     this.beatCircle2.stroke = this.state.ball.outer.stroke;
+
+    this.beatCircle1.opacity = 0;
+    this.beatCircle2.opacity = 0;
   }
 
   timelineSetup() {
