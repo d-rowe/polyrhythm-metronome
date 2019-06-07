@@ -133,7 +133,7 @@ class App extends React.Component {
           <div className="container">
             <div className="columns">
               <div className="column vCenter">
-                <div className="box shadow">
+                <div className="box shadow has-text-centered">
                   <div className="bar">
                     <h6 className="title is-6">polyrhythm metronome</h6>
                   </div>
@@ -207,6 +207,8 @@ class App extends React.Component {
                       </div>
                     </div>
                   </div>
+                  <br/>
+                  <p>&copy; 2019 <a href="https://danielrowetech.com">daniel rowe</a></p>
                 </div>
               </div>
               <div className="column is-three-fifths">
