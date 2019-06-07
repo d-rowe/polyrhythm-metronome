@@ -21,14 +21,14 @@ class Geometry extends React.Component {
       ball: {
         inner: {
           bigRadius: 25,
-          smallRadius: 10,
+          smallRadius: 5,
           fill: colors[1],
           stroke: colors[1],
           radiusEasing: Power4.easeIn
         },
         outer: {
           bigRadius: 25,
-          smallRadius: 10,
+          smallRadius: 5,
           fill: colors[3],
           stroke: colors[3],
           radiusEasing: Power2.easeIn
