@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-const TempoInput = ({ setTempo }) => {
+const TempoInput = ({ tempo, setTempo }) => {
+  const [min, max] = [10, 999];
+
   const onKeyDown = e => {
     if (e.keyCode === 13) {
       onChange(e);
@@ -9,11 +11,11 @@ const TempoInput = ({ setTempo }) => {
   };
 
   const onChange = e => {
-    if (e.target.value > 999) {
-      e.target.value = 999;
+    if (e.target.value > max) {
+      e.target.value = max;
     }
-    if (e.target.value < 20) {
-      e.target.value = 20;
+    if (e.target.value < min) {
+      e.target.value = min;
     }
     if (e.target.value !== "") {
       setTempo(parseInt(e.target.value));
@@ -26,11 +28,15 @@ const TempoInput = ({ setTempo }) => {
       onBlur={onChange}
       className="input paditem"
       type="number"
-      defaultValue="100"
-      min="3"
-      max="1000"
+      defaultValue={tempo}
     />
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    tempo: state.tempo
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -42,6 +48,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(TempoInput);
