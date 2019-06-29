@@ -24,15 +24,9 @@ const rootReducer = (state = initState, action) => {
   }
 
   if (action.type === "SET_MUTE") {
-    let mute = state.mute;
-    if (action.side === "outside") {
-      mute.outside = action.mute;
-    } else if (action.side === "inside") {
-      mute.inside = action.mute;
-    }
     return {
       ...state,
-      mute: mute
+      mute: { ...state.mute, [action.side]: action.mute }
     };
   }
 

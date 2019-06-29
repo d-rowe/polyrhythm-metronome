@@ -3,7 +3,7 @@ import PlayButton from "../components/PlayButton";
 import Geometry from "../components/Geometry";
 import SubdivisionInput from "../components/SubdivisionInput";
 import TempoInput from "../components/TempoInput";
-import { connect } from "react-redux";
+import MuteButton from "../components/MuteButton";
 
 const Main = () => {
   return (
@@ -25,29 +25,11 @@ const Main = () => {
                   <div className="polybar">
                     <div className="bar">
                       <SubdivisionInput side="outside" />
-                      <button
-                        className="button toggleButton"
-                        // onClick={this.toggleBlue}
-                      >
-                        <i
-                          className={
-                            true ? "fas fa-volume-mute" : "fas fa-volume-up"
-                          }
-                        />
-                      </button>
+                      <MuteButton side="outside" />
                     </div>
                     <div className="bar">
                       <SubdivisionInput side="inside" />
-                      <button
-                        className="button toggleButton"
-                        // onClick={this.toggleRed}
-                      >
-                        <i
-                          className={
-                            true ? "fas fa-volume-mute" : "fas fa-volume-up"
-                          }
-                        />
-                      </button>
+                      <MuteButton side="inside" />
                     </div>
                   </div>
                 </div>
@@ -68,37 +50,4 @@ const Main = () => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    tempo: state.tempo,
-    play: state.play,
-    mute: state.mute,
-    subdivision: state.subdivision
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setTempo: tempo => {
-      dispatch({ type: "SET_TEMPO", tempo: tempo });
-    },
-    setMute: (side, mute) => {
-      dispatch({ type: "SET_MUTE", side: side, mute: mute });
-    },
-    setPlay: play => {
-      dispatch({ type: "SET_PLAY", play: play });
-    },
-    setSubdivision: (side, subdivision) => {
-      dispatch({
-        type: "SET_SUBDIVISION",
-        side: side,
-        subdivision: subdivision
-      });
-    }
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main);
+export default Main;
