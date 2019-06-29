@@ -1,8 +1,11 @@
+import Sampler from "../audio/sampler";
+
 const initState = {
   tempo: 100,
   play: false,
   mute: { outside: false, inside: false },
-  subdivision: { outside: 4, inside: 3 }
+  subdivision: { outside: 4, inside: 3 },
+  sampler: new Sampler()
 };
 
 const rootReducer = (state = initState, action) => {
@@ -34,21 +37,9 @@ const rootReducer = (state = initState, action) => {
   }
 
   if (action.type === "SET_SUBDIVISION") {
-    let subdivision = state.subdivision;
-    let actionSubdivision = action.subdivision;
-    if (action.side === "outside") {
-      if (actionSubdivision >= 1000) {
-        actionSubdivision = 999;
-      }
-
-      subdivision.outside = actionSubdivision;
-    } else if (action.side === "inside") {
-      subdivision.inside = action.subdivision;
-    }
-
     return {
       ...state,
-      subdivision: subdivision
+      subdivision: { ...state.subdivision, [action.side]: action.subdivision }
     };
   }
 

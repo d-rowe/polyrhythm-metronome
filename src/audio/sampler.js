@@ -4,13 +4,21 @@ import low from "../sounds/low.ogg";
 
 export default class Sampler {
   constructor() {
-    this.bluePanVol = new Tone.PanVol(0, 0).toMaster();
-    this.redPanVol = new Tone.PanVol(0, 0).toMaster();
-    this.blueClick = new Tone.Player({
+    this.outsidePanVol = new Tone.PanVol(0, 0).toMaster();
+    this.insidePanVol = new Tone.PanVol(0, 0).toMaster();
+    this.outsideClick = new Tone.Player({
       url: low
-    }).connect(this.bluePanVol);
-    this.redClick = new Tone.Player({
+    }).connect(this.outsidePanVol);
+    this.insideClick = new Tone.Player({
       url: hi
-    }).connect(this.redPanVol);
+    }).connect(this.insidePanVol);
+  }
+
+  playInside = () => {
+    this.insideClick.start()
+  }
+
+  playOutside = () => {
+    this.outsideClick.start()
   }
 }
