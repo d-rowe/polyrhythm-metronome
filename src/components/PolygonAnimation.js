@@ -12,8 +12,7 @@ class PolygonAnimation extends React.Component {
     this.initializeTwo();
     this.createPolygons();
     this.createCircles();
-    this.lowClick = new Audio(low);
-    this.hiClick = new Audio(hi);
+    this.click = { inside: new Audio(hi), outside: new Audio(low) };
   }
 
   componentDidUpdate = prevProps => {
@@ -143,7 +142,7 @@ class PolygonAnimation extends React.Component {
             ease: this.props.ball[side].radiusEasing,
             onStart: () => {
               if (!this.props.mute[side]) {
-                side === "inside" ? this.hiClick.play() : this.lowClick.play();
+                this.click[side].play();
               }
             }
           })
