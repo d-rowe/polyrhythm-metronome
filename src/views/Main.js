@@ -1,9 +1,9 @@
 import React from "react";
-import PlayButton from "../components/PlayButton";
-import Geometry from "../components/Geometry";
-import SubdivisionInput from "../components/SubdivisionInput";
-import TempoInput from "../components/TempoInput";
-import MuteButton from "../components/MuteButton";
+import PlayButton from "../components/toolbar/PlayButton";
+import PolygonAnimation from "../components/PolygonAnimation";
+import SubdivisionInput from "../components/toolbar/SubdivisionInput";
+import TempoInput from "../components/toolbar/TempoInput";
+import MuteButton from "../components/toolbar/MuteButton";
 
 const Main = () => {
   return (
@@ -41,7 +41,7 @@ const Main = () => {
               </div>
             </div>
             <div className="column is-three-fifths">
-              <Geometry />
+              <PolygonAnimation />
             </div>
           </div>
         </div>

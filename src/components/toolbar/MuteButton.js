@@ -1,4 +1,5 @@
 import React from "react";
+import { SET_MUTE } from "../../constants/actions";
 import { connect } from "react-redux";
 
 const MuteButton = ({ side, mute, setMute }) => {
@@ -21,7 +22,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setMute: (side, mute) => {
-      dispatch({ type: "SET_MUTE", side: side, mute: mute });
+      dispatch({ type: SET_MUTE, side: side, mute: mute });
     }
   };
 };

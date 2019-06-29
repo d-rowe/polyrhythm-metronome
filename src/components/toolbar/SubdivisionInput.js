@@ -1,4 +1,5 @@
 import React from "react";
+import { SET_SUBDIVISION } from "../../constants/actions";
 import { connect } from "react-redux";
 
 class SubdivisionInput extends React.Component {
@@ -20,6 +21,12 @@ class SubdivisionInput extends React.Component {
 
   onKeyDown = e => {
     if (e.keyCode === 13) {
+      this.onChange(e);
+    }
+  };
+
+  onBlur = e => {
+    if (parseInt(e.target.value) !== this.props.subdivision[this.side]) {
       this.onChange(e);
     }
   };
@@ -57,7 +64,7 @@ class SubdivisionInput extends React.Component {
     return (
       <input
         ref="subInput"
-        onBlur={this.onChange}
+        onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         className={"input side" + this.className}
         type="number"
@@ -77,7 +84,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setSubdivision: (side, subdivision) => {
       dispatch({
-        type: "SET_SUBDIVISION",
+        type: SET_SUBDIVISION,
         side: side,
         subdivision: subdivision
       });

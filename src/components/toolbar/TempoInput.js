@@ -1,4 +1,5 @@
 import React from "react";
+import { SET_TEMPO } from "../../constants/actions";
 import { connect } from "react-redux";
 
 const TempoInput = ({ tempo, setTempo }) => {
@@ -42,7 +43,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setTempo: tempo => {
-      dispatch({ type: "SET_TEMPO", tempo: tempo });
+      dispatch({ type: SET_TEMPO, tempo: tempo });
     }
   };
 };

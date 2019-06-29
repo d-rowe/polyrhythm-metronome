@@ -1,4 +1,5 @@
 import React from "react";
+import { SET_PLAY } from "../../constants/actions";
 import { connect } from "react-redux";
 
 const PlayButton = ({ play, setPlay }) => {
@@ -23,7 +24,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setPlay: play => {
-      dispatch({ type: "SET_PLAY", play: play });
+      dispatch({ type: SET_PLAY, play: play });
     }
   };
 };
