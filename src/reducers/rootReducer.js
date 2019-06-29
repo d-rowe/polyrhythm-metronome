@@ -1,11 +1,46 @@
 import Sampler from "../audio/sampler";
+import { Power2, Power4 } from "gsap/TweenMax";
 
+const colors = [
+  "hsl(348, 100%, 61%)",
+  "hsl(348, 100%, 61%)",
+  "hsl(204, 86%, 53%)",
+  "hsl(204, 86%, 53%)"
+];
 const initState = {
   tempo: 100,
   play: false,
   mute: { outside: false, inside: false },
   subdivision: { outside: 4, inside: 3 },
-  sampler: new Sampler()
+  sampler: new Sampler(),
+  ball: {
+    inner: {
+      maxRadius: 25,
+      minRadius: 5,
+      fill: colors[1],
+      stroke: colors[1],
+      radiusEasing: Power4.easeIn
+    },
+    outer: {
+      maxRadius: 25,
+      minRadius: 5,
+      fill: colors[3],
+      stroke: colors[3],
+      radiusEasing: Power2.easeIn
+    }
+  },
+  polygons: {
+    lineWidth: 2,
+    outer: { color: colors[2] },
+    inner: { color: colors[0] }
+  },
+  render: {
+    origin: { x: 250, y: 250 },
+    width: 500,
+    height: 500,
+    innerRadius: 100,
+    outerRadius: 200
+  }
 };
 
 const rootReducer = (state = initState, action) => {
