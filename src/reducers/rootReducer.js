@@ -1,37 +1,30 @@
-import Sampler from "../audio/sampler";
 import { Power2, Power4 } from "gsap/TweenMax";
 
-const colors = [
-  "hsl(348, 100%, 61%)",
-  "hsl(348, 100%, 61%)",
-  "hsl(204, 86%, 53%)",
-  "hsl(204, 86%, 53%)"
-];
+const colors = ["hsl(348, 100%, 61%)", "hsl(204, 86%, 53%)"];
 const initState = {
   tempo: 100,
   play: false,
   mute: { outside: false, inside: false },
   subdivision: { outside: 4, inside: 3 },
-  sampler: new Sampler(),
   ball: {
     inner: {
       maxRadius: 25,
       minRadius: 5,
-      fill: colors[1],
-      stroke: colors[1],
+      fill: colors[0],
+      stroke: colors[0],
       radiusEasing: Power4.easeIn
     },
     outer: {
       maxRadius: 25,
       minRadius: 5,
-      fill: colors[3],
-      stroke: colors[3],
+      fill: colors[1],
+      stroke: colors[1],
       radiusEasing: Power2.easeIn
     }
   },
   polygons: {
     lineWidth: 2,
-    outer: { color: colors[2] },
+    outer: { color: colors[1] },
     inner: { color: colors[0] }
   },
   render: {

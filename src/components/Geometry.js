@@ -3,6 +3,8 @@ import Two from "two.js";
 import { TweenMax, Power2, Power4 } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
 import { connect } from "react-redux";
+import hi from "../sounds/hi.ogg";
+import low from "../sounds/low.ogg";
 import "./Geometry.scss";
 
 class Geometry extends React.Component {
@@ -10,6 +12,8 @@ class Geometry extends React.Component {
     this.initializeTwo();
     this.drawShapes();
     this.initiateBeatCircles();
+    this.lowClick = new Audio(low);
+    this.hiClick = new Audio(hi);
   }
 
   componentDidUpdate = prevProps => {
@@ -31,17 +35,17 @@ class Geometry extends React.Component {
 
     if (this.props.mute.inside !== prevProps.mute.inside) {
       if (this.props.mute.inside) {
-        this.beatCircle1.opacity = 0;
+        this.insideCircle.opacity = 0;
       } else if (this.props.play) {
-        this.beatCircle1.opacity = 1;
+        this.insideCircle.opacity = 1;
       }
     }
 
     if (this.props.mute.outside !== prevProps.mute.outside) {
       if (this.props.mute.outside) {
-        this.beatCircle2.opacity = 0;
+        this.outsideCircle.opacity = 0;
       } else if (this.props.play) {
-        this.beatCircle2.opacity = 1;
+        this.outsideCircle.opacity = 1;
       }
     }
   };
@@ -55,8 +59,16 @@ class Geometry extends React.Component {
 
   play = () => {
     this.props.setPlay(true);
-    this.beatCircle1.opacity = 1;
-    this.beatCircle2.opacity = 1;
+    if (this.props.mute.inside) {
+      this.insideCircle.opacity = 0;
+    } else {
+      this.insideCircle.opacity = 1;
+    }
+    if (this.props.mute.outside) {
+      this.outsideCircle.opacity = 0;
+    } else {
+      this.outsideCircle.opacity = 1;
+    }
     this.timelineSetup();
     this.timeline1.play();
     this.timeline2.play();
@@ -122,26 +134,26 @@ class Geometry extends React.Component {
   };
 
   initiateBeatCircles = () => {
-    this.beatCircle1 = this.two.makeCircle(
+    this.insideCircle = this.two.makeCircle(
       this.props.render.origin.x,
       this.props.render.origin.y - this.props.render.innerRadius,
       this.props.ball.inner.maxRadius
     );
-    this.beatCircle1.fill = this.props.ball.inner.fill;
-    this.beatCircle1.stroke = this.props.ball.inner.stroke;
-    this.beatCircle2 = this.two.makeCircle(
+    this.insideCircle.fill = this.props.ball.inner.fill;
+    this.insideCircle.stroke = this.props.ball.inner.stroke;
+    this.outsideCircle = this.two.makeCircle(
       this.props.render.origin.x,
       this.props.render.origin.y - this.props.render.outerRadius,
       this.props.ball.outer.maxRadius
     );
-    this.beatCircle2.fill = this.props.ball.outer.fill;
-    this.beatCircle2.stroke = this.props.ball.outer.stroke;
+    this.outsideCircle.fill = this.props.ball.outer.fill;
+    this.outsideCircle.stroke = this.props.ball.outer.stroke;
 
-    this.beatCircle1.opacity = 0;
-    this.beatCircle2.opacity = 0;
+    this.insideCircle.opacity = 0;
+    this.outsideCircle.opacity = 0;
   };
 
-  timelineSetup = () => {
+  timelineSetup() {
     let duration = (60 / this.props.tempo) * this.props.subdivision.outside;
 
     this.timeline1 = new TimelineMax({ repeat: -1 });
@@ -152,11 +164,15 @@ class Geometry extends React.Component {
     let points1 = this.shape1.points;
     for (let i = 1; i <= points1.length; i++) {
       this.timeline1.add(
-        TweenMax.to(this.beatCircle1.translation, 1, {
+        TweenMax.to(this.insideCircle.translation, 1, {
           x: points1[i % this.shape1.sides].x,
           y: points1[i % this.shape1.sides].y,
           ease: this.props.ball.inner.radiusEasing,
-          onStart: this.props.sampler.playInside()
+          onStart: () => {
+            if (!this.props.mute.inside) {
+              this.hiClick.play();
+            }
+          }
         })
       );
     }
@@ -164,13 +180,13 @@ class Geometry extends React.Component {
 
     for (let i = 1; i <= points1.length; i++) {
       this.radiusFlash1.add(
-        TweenMax.to(this.beatCircle1, 1, {
+        TweenMax.to(this.insideCircle, 1, {
           radius: this.props.ball.inner.minRadius,
           ease: Power4.easeOut
         })
       );
       this.radiusFlash1.add(
-        TweenMax.to(this.beatCircle1, 1, {
+        TweenMax.to(this.insideCircle, 1, {
           radius: this.props.ball.inner.maxRadius,
           ease: this.props.ball.inner.radiusEasing
         })
@@ -181,11 +197,15 @@ class Geometry extends React.Component {
     let points2 = this.shape2.points;
     for (let i = 1; i <= points2.length; i++) {
       this.timeline2.add(
-        TweenMax.to(this.beatCircle2.translation, 1, {
+        TweenMax.to(this.outsideCircle.translation, 1, {
           x: points2[i % this.shape2.sides].x,
           y: points2[i % this.shape2.sides].y,
           ease: Power2.easeIn,
-          onStart: this.props.sampler.playOutside()
+          onStart: () => {
+            if (!this.props.mute.outside) {
+              this.lowClick.play();
+            }
+          }
         })
       );
     }
@@ -193,20 +213,20 @@ class Geometry extends React.Component {
 
     for (let i = 1; i <= points2.length; i++) {
       this.radiusFlash2.add(
-        TweenMax.to(this.beatCircle2, 1, {
+        TweenMax.to(this.outsideCircle, 1, {
           radius: this.props.ball.outer.minRadius,
           ease: Power4.easeOut
         })
       );
       this.radiusFlash2.add(
-        TweenMax.to(this.beatCircle2, 1, {
+        TweenMax.to(this.outsideCircle, 1, {
           radius: this.props.ball.outer.maxRadius,
           ease: this.props.ball.outer.radiusEasing
         })
       );
     }
     this.radiusFlash2.duration(duration);
-  };
+  }
 
   getPoints = (shape, sides) => {
     let points = [];
@@ -246,8 +266,7 @@ const mapStateToProps = state => {
     subdivision: state.subdivision,
     ball: state.ball,
     polygons: state.polygons,
-    render: state.render,
-    sampler: state.sampler
+    render: state.render
   };
 };
 
