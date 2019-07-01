@@ -1,7 +1,7 @@
 import React from "react";
 import Two from "two.js";
 import { SET_PLAY } from "../constants/actions";
-import { TweenMax, Power4 } from "gsap/TweenMax";
+import { TweenMax } from "gsap/TweenMax";
 import { TimelineMax } from "gsap/TimelineMax";
 import { connect } from "react-redux";
 import hi from "../sounds/hi.ogg";
@@ -154,7 +154,7 @@ class PolygonAnimation extends React.Component {
         this.radiusFlash[side].add(
           TweenMax.to(this.circles[side], 1, {
             radius: this.props.ball[side].minRadius,
-            ease: Power4.easeOut
+            ease: this.props.ball[side].ease
           })
         );
         this.radiusFlash[side].add(
