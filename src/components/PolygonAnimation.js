@@ -9,6 +9,7 @@ import low from "../sounds/low.ogg";
 
 class PolygonAnimation extends React.Component {
   componentDidMount() {
+    this.sides = ["inside", "outside"];
     this.initializeTwo();
     this.createPolygons();
     this.createCircles();
@@ -28,7 +29,7 @@ class PolygonAnimation extends React.Component {
       this.props.play ? this.play() : this.stop();
     }
     // Handle mute changes
-    ["inside", "outside"].forEach(side => {
+    this.sides.forEach(side => {
       if (this.props.mute[side] !== prevProps.mute[side]) {
         if (this.props.mute[side]) {
           this.circles[side].opacity = 0;
@@ -49,7 +50,7 @@ class PolygonAnimation extends React.Component {
   play = () => {
     this.props.setPlay(true);
     this.timelineSetup();
-    ["inside", "outside"].forEach(side => {
+    this.sides.forEach(side => {
       if (this.props.mute[side]) {
         this.circles[side].opacity = 0;
       } else {
@@ -64,7 +65,7 @@ class PolygonAnimation extends React.Component {
     this.props.setPlay(false);
     try {
       if (typeof this.timeline.inside !== "undefined") {
-        ["inside", "outside"].forEach(side => {
+        this.sides.forEach(side => {
           this.timeline[side].remove(this.timeline[side].getChildren());
           this.radiusFlash[side].remove();
         });
@@ -88,7 +89,7 @@ class PolygonAnimation extends React.Component {
 
   createPolygons = () => {
     this.polygons = {};
-    ["inside", "outside"].forEach(side => {
+    this.sides.forEach(side => {
       this.polygons[side] = this.two.makePolygon(
         this.props.render.origin.x,
         this.props.render.origin.y,
@@ -109,7 +110,7 @@ class PolygonAnimation extends React.Component {
 
   createCircles = () => {
     this.circles = {};
-    ["inside", "outside"].forEach(side => {
+    this.sides.forEach(side => {
       this.circles[side] = this.two.makeCircle(
         this.props.render.origin.x,
         this.props.render.origin.y - this.props.render.radius[side],
@@ -129,7 +130,7 @@ class PolygonAnimation extends React.Component {
     let points = {};
     [this.timeline, this.radiusFlash] = [{}, {}];
 
-    ["inside", "outside"].forEach(side => {
+    this.sides.forEach(side => {
       this.timeline[side] = new TimelineMax({ repeat: -1 });
       this.radiusFlash[side] = new TimelineMax({ repeat: -1 });
 
