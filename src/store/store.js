@@ -6,7 +6,7 @@ const initState = {
   play: false,
   mute: { outside: false, inside: false },
   subdivision: { outside: 4, inside: 3 },
-  ball: {
+  balls: {
     inside: {
       maxRadius: 25,
       minRadius: 5,
