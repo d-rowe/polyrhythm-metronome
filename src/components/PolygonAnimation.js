@@ -114,10 +114,10 @@ class PolygonAnimation extends React.Component {
       this.circles[side] = this.two.makeCircle(
         this.props.render.origin.x,
         this.props.render.origin.y - this.props.render.radius[side],
-        this.props.ball[side].maxRadius
+        this.props.balls[side].maxRadius
       );
-      this.circles[side].fill = this.props.ball[side].fill;
-      this.circles[side].stroke = this.props.ball[side].stroke;
+      this.circles[side].fill = this.props.balls[side].fill;
+      this.circles[side].stroke = this.props.balls[side].stroke;
       this.circles[side].opacity = 0;
     });
   };
@@ -140,7 +140,7 @@ class PolygonAnimation extends React.Component {
           TweenMax.to(this.circles[side].translation, 1, {
             x: points[side][i % this.polygons[side].sides].x,
             y: points[side][i % this.polygons[side].sides].y,
-            ease: this.props.ball[side].radiusEasing,
+            ease: this.props.balls[side].radiusEasing,
             onStart: () => {
               if (!this.props.mute[side]) {
                 this.click[side].play();
@@ -154,14 +154,14 @@ class PolygonAnimation extends React.Component {
       for (let i = 1; i <= points[side].length; i++) {
         this.radiusFlash[side].add(
           TweenMax.to(this.circles[side], 1, {
-            radius: this.props.ball[side].minRadius,
-            ease: this.props.ball[side].ease
+            radius: this.props.balls[side].minRadius,
+            ease: this.props.balls[side].ease
           })
         );
         this.radiusFlash[side].add(
           TweenMax.to(this.circles[side], 1, {
-            radius: this.props.ball[side].maxRadius,
-            ease: this.props.ball[side].radiusEasing
+            radius: this.props.balls[side].maxRadius,
+            ease: this.props.balls[side].radiusEasing
           })
         );
       }
@@ -205,7 +205,7 @@ const mapStateToProps = state => {
     play: state.play,
     mute: state.mute,
     subdivision: state.subdivision,
-    ball: state.ball,
+    balls: state.balls,
     polygons: state.polygons,
     render: state.render
   };
