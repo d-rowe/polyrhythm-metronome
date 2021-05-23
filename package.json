@@ -11,7 +11,7 @@
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.0",
     "redux": "^4.0.1",
-    "tone": "^13.4.9",
+    "tone": "^14.7.77",
     "two.js": "^0.7.0-beta.3"
   },
   "scripts": {
